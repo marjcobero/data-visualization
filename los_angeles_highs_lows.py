@@ -13,11 +13,15 @@ with open(filename) as f:
     dates, highs, lows = [], [], []
     for row in reader:
         current_date = datetime.strptime(row[2], '%Y-%m-%d')
-        high = int(row[5])
-        low = int(row[6])
-        dates.append(current_date)
-        highs.append(high)
-        lows.append(low)
+        try:
+            high = int(row[4])
+            low = int(row[5])
+        except ValueError:
+            print(f"Missing data for {current_date}")
+        else:
+            dates.append(current_date)
+            highs.append(high)
+            highs.append(low)
     
     #Plot the high and low temperatures
     plt.style.use('seaborn')
@@ -27,7 +31,8 @@ with open(filename) as f:
     ax.fill_between(dates, highs, lows, facecolor='blue', alpha=0.1)
     
     #Format plot
-    ax.set_title("Daily high and low temperatures - 2021", fontsize=24)
+    title = "Daily high and low temperatures - 2020 \n Los Angeles, CA"
+    ax.set_title(title, fontsize=20)
     ax.set_xlabel('', fontsize=16)
     fig.autofmt_xdate()
     ax.set_ylabel("Temperature (F)", fontsize=16)
